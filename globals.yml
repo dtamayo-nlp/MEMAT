@@ -1,0 +1,16 @@
+---
+  # Result files
+  RESULTS_DIR: "results"
+
+  # Data files
+  DATA_DIR: "./data"
+  STATS_DIR: "./data/stats"
+  KV_DIR: "./share"
+  
+  AGUILA_MODEL: "projecte-aina/aguila-7b"
+  
+  # Hyperparameters
+  HPARAMS_DIR: "hparams"
+
+  # Remote URLs
+  REMOTE_ROOT_URL: "https://memit.baulab.info"

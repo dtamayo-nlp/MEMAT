@@ -1,0 +1,1 @@
+python -m experiments.evaluate_all_bilingual_attention --alg_name=MEMIT --hparams=aguila.json --dir_name=Bilingual_Attention --dataset_size_limit=3000 --generation_test_interval=-1 --num_edits=1000 --use_cache --top_num_heads=16 --add_attention
