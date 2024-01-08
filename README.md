@@ -23,12 +23,17 @@ If you download the data, you will already have the dataset `catalan_CF.json`. H
 
 This section outlines the procedures for generating various figures and conducting experiments.
 
+- Subfigures 2(e), 2(f) and 2(g): Execute the following command to generate different figures in ./figures/individual:
+```
+python causal_tracing.py
+```
+
 - Figure 3: Execute the following command to generate the figure in ./figures/causal_trace:
 ```
 python -m experiments.computing_all 
 ```
 
-- Figure7. Use the command below to generate the figure in ./figures/Tuning_LR:
+- Figure 7. Use the command below to generate the figure in ./figures/Tuning_LR:
 ```
 bash tuning_LR.sh
 ```
@@ -94,4 +99,4 @@ bash random_heads.sh
 
 Our code is based on  [``MEMIT``](https://github.com/kmeng01/memit.git) and [``ITI``](https://github.com/likenneth/honest_llama.git). 
 
-The model used is [``Aguila-7b``](https://huggingface.co/projecte-aina/aguila-7b) which is based on [``Falcon-7b``](https://huggingface.co/tiiuae/falcon-7b)
+The model used is [``Aguila-7b``](https://huggingface.co/projecte-aina/aguila-7b) which is based on [``Falcon-7b``](https://huggingface.co/tiiuae/falcon-7b).
