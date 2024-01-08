@@ -17,7 +17,7 @@ To replicate our experiments, download the necessary data and covariance matrice
 
 ## Dataset Translation
 
-If you download the data, you will already have the dataset `catalan_CF.json`. However, to bring a clearer view of the main procedure followed to translate from `english_CF.json` to `catalan_CF.json`, we provide the file `./Translator/Translation_FactualAssociations.ipynb`. To perform the translation you just need to copy the file `Translator` in your google colab, add `english_CF.json` and translate.
+If you download the data, you will already have the dataset `catalan_CF.json`. However, to bring a clearer view of the main procedure followed to translate from `english_CF.json` to `catalan_CF.json`, we provide the file `./Translator/Translation_FactualAssociations.ipynb`. To perform the translation you just need to copy the folder `Translator` in your google colab, add `english_CF.json` and translate.
 
 ## Experiments and Figures
 
@@ -94,6 +94,7 @@ python -m experiments.experiments_all_in_one --alg_name=MEMIT --hparams=aguila.j
 bash random_heads.sh
 ```
 
+EXTRA NOTE: If you want to avoid some extra time in computing the inverses implied in matrices $C$, you could save and load the $\Delta$ matrices using `--save_delta_matrix` and `--load_delta`, but this will imply an extra requirement of space. 
 
 ## Acknowledgments
 
