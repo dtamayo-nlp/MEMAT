@@ -21,7 +21,7 @@ To replicate our experiments, download the necessary data and covariance matrice
 ```
 bash cross_linguality.sh
 ```
-which calls the command: `python -m experiments.evaluate --alg_name=MEMIT --dir_name=MEMIT_all --hparams_fname=aguila.json --dataset_name={lang}_CF.json --language={lang} --language_eval={lang} --num_edits=1000 --dataset_size_limit=7000 --use_cache --continue_from_run=run_000` and saves the results of each experiment in `results/MEMIT_all/run_000`.
+which calls the command: `python -m experiments.evaluate --alg_name=MEMIT --dir_name=MEMIT_all --hparams_fname=aguila.json --dataset_name={lang}_CF.json --language={lang} --language_eval={lang_ev} --num_edits=1000 --dataset_size_limit=7000 --use_cache --continue_from_run=run_000` and saves the results of each experiment in `results/MEMIT_all/run_000`.
 
 ### MEMAT
 - To reproduce the training with MEMAT and the attention head relevance, you just need to execute:
