@@ -36,7 +36,7 @@ python -m experiments.experiments_all_in_one --alg_name=MEMIT --hparams=aguila.j
 
 After running the experiments, summarize the content that is present in `./results` using the main function of `experiments.summarize`. Refer to the provided script `Figure_9.py` for guidance.
 
-- To obtain the data from Figure you need to use and load the head positions and the head correction vectors obtained from a first block of 1000 examples using `--head_ind` and `--load_attention` (you will also need to remove the data used for the further experiments). Once you run bash `MEMAT_hyperparam_selection.sh`, you will obtain the following files:
+- To obtain the data from Figure 4 you need to use and load the head positions and the head correction vectors obtained from a first block of 1000 examples using `--head_ind` and `--load_attention` (you will also need to remove the data used for the further experiments). Once you run bash `MEMAT_hyperparam_selection.sh`, you will obtain the following files:
 ```
 ["./catalan_CC_heads_16_iter_0_languageT_catalan", "./catalan_CE_heads_16_iter_0_languageT_english", "./english_EC_heads_16_iter_0_languageT_catalan", "./english_EE_heads_16_iter_0_languageT_english"]
 ["./indices_iter_0_languageT_catalan_numH_16.npy", "./indices_iter_0_languageT_ce_numH_16.npy", "./indices_iter_0_languageT_ec_numH_16.npy","./indices_iter_0_languageT_english_numH_16.npy"]
@@ -65,7 +65,8 @@ bash evaluate_ITI_fails.sh
 bash bilingual_approach_section.sh
 ```
 
-EXTRA NOTE: If you want to avoid some extra time in computing the inverses implied in matrices $C$, you could save and load the $\Delta$ matrices using `--save_delta_matrix` and `--load_delta`, but this will imply an extra requirement of space. 
+### Compute vs Space
+If you want to avoid some extra time in computing the inverses implied in matrices $C$, you could save and load the $\Delta$ matrices using `--save_delta_matrix` and `--load_delta`, but this will imply an extra requirement of space. 
 
 ## Acknowledgments
 
