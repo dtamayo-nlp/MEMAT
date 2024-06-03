@@ -33,4 +33,4 @@ for top_num_heads_i in "${top_num_heads_values[@]}"; do
 	python -m experiments.experiments_all_in_one --alg_name=MEMIT --hparams=aguila.json --dir_name=EC --dataset_size_limit=3000 --generation_test_interval=-1 --dataset_name=english_CF.json --language=english --language_eval=catalan --num_edits=1000 --use_cache --save_attention_heads="./catalan_EC_heads_$top_num_heads_i" --top_num_heads=$top_num_heads_i --add_attention > "logs_EC_${top_num_heads_i}.txt" 2>&1
 done
 
-python Figures_15_16_17.py
+python Figure_9.py

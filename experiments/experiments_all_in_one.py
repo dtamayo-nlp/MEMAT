@@ -187,16 +187,42 @@ def main(
     ds = ds_class(DATA_DIR, dataset_name, tok=tok, size=dataset_size_limit)
 
     # This is not optimal, but let us also put the other language of training
+
     if language_eval == "catalan":
-        ds_eval = ds_class(DATA_DIR, "catalan_CF.json",tok=tok, size=dataset_size_limit)
-        ds_other = ds_class(DATA_DIR, "english_CF.json",tok=tok, size=dataset_size_limit)
-        language_other = "english"
+        if "new" in dataset_name:
+            ds_eval = ds_class(DATA_DIR, "catalan_CF_new.json",tok=tok, size=dataset_size_limit)
+            ds_other = ds_class(DATA_DIR, "english_CF_new.json",tok=tok, size=dataset_size_limit)
+            language_other = "english"
+        elif "dif" in dataset_name:
+            ds_eval = ds_class(DATA_DIR, "data_cat_dif_subj.json",tok=tok, size=dataset_size_limit)
+            ds_other = ds_class(DATA_DIR, "data_eng_dif_subj.json",tok=tok, size=dataset_size_limit)
+            language_other = "english"
+        elif "eq" in dataset_name:
+            ds_eval = ds_class(DATA_DIR, "data_cat_eq_subj.json",tok=tok, size=dataset_size_limit)
+            ds_other = ds_class(DATA_DIR, "data_eng_eq_subj.json",tok=tok, size=dataset_size_limit)
+            language_other = "english"
+        else:
+            ds_eval = ds_class(DATA_DIR, "catalan_CF.json",tok=tok, size=dataset_size_limit)
+            ds_other = ds_class(DATA_DIR, "english_CF.json",tok=tok, size=dataset_size_limit)
+            language_other = "english"
 
     elif language_eval == "english":
-        ds_eval = ds_class(DATA_DIR, "english_CF.json",tok=tok, size=dataset_size_limit)
-        ds_other = ds_class(DATA_DIR, "catalan_CF.json",tok=tok, size=dataset_size_limit)
-        language_other = "catalan"
-
+        if "new" in dataset_name:
+            ds_eval = ds_class(DATA_DIR, "english_CF_new.json",tok=tok, size=dataset_size_limit)
+            ds_other = ds_class(DATA_DIR, "catalan_CF_new.json",tok=tok, size=dataset_size_limit)
+            language_other = "catalan"
+        elif "dif" in dataset_name:
+            ds_eval = ds_class(DATA_DIR, "data_eng_dif_subj.json",tok=tok, size=dataset_size_limit)
+            ds_other = ds_class(DATA_DIR, "data_cat_dif_subj.json",tok=tok, size=dataset_size_limit)
+            language_other = "catalan"
+        elif "eq" in dataset_name:
+            ds_eval = ds_class(DATA_DIR, "data_eng_eq_subj.json",tok=tok, size=dataset_size_limit)
+            ds_other = ds_class(DATA_DIR, "data_cat_eq_subj.json",tok=tok, size=dataset_size_limit)
+            language_other = "english"
+        else:
+            ds_eval = ds_class(DATA_DIR, "english_CF.json",tok=tok, size=dataset_size_limit)
+            ds_other = ds_class(DATA_DIR, "catalan_CF.json",tok=tok, size=dataset_size_limit)
+            language_other = "english"
     # if language_eval != None and language_eval == language:
     #     if language_eval == "catalan":
     #         ds_new = ds_class(DATA_DIR, "catalan_data_7102.json",tok=tok, size=dataset_size_limit)
@@ -413,9 +439,9 @@ def main(
 
             else:
                 if "{}" in head_ind:
-                    top_heads = np.load(head_ind.format(num_c))[:top_num_heads]
+                    top_heads = np.load("./heads_saved/positions/"+head_ind.format(num_c))[:top_num_heads]
                 else:
-                    top_heads = np.load(head_ind)[:top_num_heads]
+                    top_heads = np.load("./heads_saved/positions/"+head_ind)[:top_num_heads]
             print("The top heads are: ", top_heads)
 
             # # Is the chunk already done?
@@ -432,17 +458,22 @@ def main(
             # Compute weight changes + record weights that changed
 
             if load_attention:
-                heads = torch.load(load_attention, map_location=device)
+                heads = torch.load("./heads_saved/heads/"+load_attention, map_location=device)
             else:
                 print("Performing head optimization")
                 heads = heads_optimization(model, tok, data_to_edit, hparams, language_eval, device, top_heads, batch_size = 32)
                 if save_attention_heads:
                     if head_ind == None:
                         if language != language_eval:
-                            np.save(f"./indices_iter_{num_c}_languageT_{language_eval}_numH_{top_num_heads}", top_heads)
+                            np.save(f"./heads_saved/positions/indices_iter_{num_c}_languageT_{language_eval}_numH_{top_num_heads}_numed_{num_edits}", top_heads)
                         else:
-                            np.save(f"./indices_iter_{num_c}_languageT_{language_eval[0]+language[0]}_numH_{top_num_heads}", top_heads)
-                    torch.save(heads, save_attention_heads+f"_iter_{num_c}_languageT_{language_eval}")
+                            np.save(f"./heads_saved/positions/indices_iter_{num_c}_languageT_{language_eval[0]+language[0]}_numH_{top_num_heads}_numed_{num_edits}", top_heads)
+                    torch.save(heads, "./heads_saved/heads/"+save_attention_heads+f"_iter_{num_c}_languageT_{language_eval}")
+
+            # More optimal saving
+            # deltas_dict = {}
+            # for ind_pair,pair in enumerate(top_heads):
+            #     deltas_dict[tuple(pair)] = deltas[ind_pair]
 
             # Heads addition 
             original_bias = []
@@ -546,7 +577,6 @@ def main(
         print("Evaluation took", time() - start)
         
 
-
 def window(seq, n=2):
     "Returns a sliding window (of width n) over data from the iterable"
     "   s -> (s0,s1,...s[n-1]), (s1,s2,...,sn), ...                   "
@@ -563,6 +593,7 @@ def chunks(arr, n):
     """Yield successive n-sized chunks from arr."""
     for i in range(0, len(arr), n):
         yield arr[i : i + n]
+
 
 def chunk_both(*arrays,n=10):
     for i in range(0,len(arrays[0]),n):
@@ -672,7 +703,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--dataset_name",
         type=str,
-        choices=["catalan_CF.json", "english_CF.json", "data_cat_dif_subj.json", "data_eng_dif_subj.json"],
+        choices=["catalan_CF.json", "english_CF.json", "catalan_CF_new.json", "english_CF_new.json","data_cat_dif_subj.json", "data_eng_dif_subj.json","data_cat_eq_subj.json", "data_eng_eq_subj.json"],
         default="english_CF.json",
         help="Name of the dataset that will be used to train the model.",
     )
@@ -730,13 +761,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "--dir_name",
         default="MEMIT",
-        help="Device to choose. Some computations will be always used in CPU.",
+        help="Directory where the results will be saved.",
     )
 
     parser.add_argument(
         "--language_eval",
         default=None,
-        help="Language used for evaluation",
+        help="Language used for the evaluation of the heads and for the optimization of the head corrections",
     )
 
     parser.add_argument(
@@ -749,7 +780,7 @@ if __name__ == "__main__":
         "--top_num_heads",
         default=5,
         type=int,
-        help = "The number of heads to be changed is"
+        help = "The number of heads corrections to be optimized"
     )
     parser.add_argument(
         "--save_attention_heads",
@@ -765,7 +796,7 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "--head_ind",
-        help= "List of heads positions where performing the edition",
+        help= "List of heads positions where performing the edition (optional)",
         default=None,
     )
     

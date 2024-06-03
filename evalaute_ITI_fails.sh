@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Define the values for alpha_i and top_num_heads_i
 alpha_values=(1.0 5.0 10.0 12.0 15.0)
 top_num_heads_values=(1 2 5 10)
